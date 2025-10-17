@@ -69,8 +69,7 @@ print(f'Длина: {len(FIO_clean)}')
 
 
 # Лабораторная работа 2
-# Задание 1
-# arrays.py
+# Задание 1 - arrays.py
 ```python
 def min_max(nums: list[float | int]) -> tuple[float | int, float | int]:
     if not nums:
@@ -111,8 +110,7 @@ print(flatten([[1,2],"ab"]))
 ![](/images/lab%2002/arrays.png)
 
 
-# Задание 2
-# matrix.py
+# Задание 2 - matrix.py
 ```python
 def transpose(mat: list[list[float | int]]) -> list[list]:
     if mat == []:
