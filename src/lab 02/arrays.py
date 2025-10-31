@@ -1,6 +1,7 @@
 def min_max(nums: list[float | int]) -> tuple[float | int, float | int]:
-    if not nums:
-     return ValueError('Список пуст')
+    if nums == []:
+        raise ValueError('Список пуст')
+    
     return tuple([min(nums), max(nums)])
 
 print(min_max([3,-1,5,5,0]))
