@@ -1,18 +1,25 @@
 import sys
-from defsfromtext import normalize,tokenize,top_n,count_freq
-
-def stats(text:str):
-    normalized_text = normalize(text)
-    splittedwords = normalized_text.split()\
+from defsfromtext import normalize, tokenize, count_freq, top_n
+def main():
     
-    list_count = len(splittedwords)
-    unique_list_count = len(set(splittedwords))
-    top_words = top_n(normalized_text, 5)
+    text = "Привет, мир! Привет!!!"
+    
 
-    print(f"Всего слов: {list_count}")
-    print(f"Уникальных слов: {unique_list_count}")
+    normalized_text = normalize(text)
+    tokens = tokenize(normalized_text)
+    total_words = len(tokens)
+    freq_dict = count_freq(tokens)
+    unique_words = len(freq_dict)
+    top_words = top_n(freq_dict, 5)
+    
+    print(f"Всего слов: {total_words}")
+    print(f"Уникальных слов: {unique_words}")
     print("Топ-5:")
+   
     for word, count in top_words:
         print(f"{word}:{count}")
 
-text_in = sys.stdin.read
+if __name__ == "__main__":
+    main() 
+
+

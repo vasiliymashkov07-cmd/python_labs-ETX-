@@ -44,7 +44,7 @@ def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
     items.sort(key=lambda x: (-x[1], x[0]))
     
     
-    return items[:2]
+    return items[:n]
 
 if __name__ == "__main__":
     print(normalize("ПрИвЕт\nМИр\t"))
@@ -62,8 +62,8 @@ if __name__ == "__main__":
     frame = ["bb","aa","bb","aa","cc"] 
     c_frame = count_freq(frame)
     print(c_frame)
-    print(top_n(c_words))  
-    print(top_n(c_frame))
+    print(top_n(c_words,2))  
+    print(top_n(c_frame,2))
     
 
 
