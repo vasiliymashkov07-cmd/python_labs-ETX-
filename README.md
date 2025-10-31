@@ -298,7 +298,7 @@ def main():
     for word, count in top_words:
         print(f"{word}:{count}")
 
-if __name__ == "__main__":
-    main() 
+
+main() 
 ```
 ![](/images/lab%2003/text_stats_py.png)

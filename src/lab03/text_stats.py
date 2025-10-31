@@ -19,7 +19,6 @@ def main():
     for word, count in top_words:
         print(f"{word}:{count}")
 
-if __name__ == "__main__":
-    main() 
+main() 
 
 
