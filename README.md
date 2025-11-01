@@ -252,25 +252,26 @@ def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
     items.sort(key=lambda x: (-x[1], x[0]))
     
     
-    return items[:2]
+    return items[:n]
 
-print(normalize("ПрИвЕт\nМИр\t"))
-print(normalize("ёжик, Ёлка"))
-print(normalize("Hello\r\nWorld"))
-print(normalize("   двойные   пробелы  "))
-print(tokenize('привет мир'))
-print(tokenize('hello,world!!!'))
-print(tokenize('по-настоящему круто'))
-print(tokenize('2025 год'))
-print(tokenize('emoji 😀 не слово'))
-words = ["a", "b", "a", "c", "b", "a"]
-c_words = count_freq(words)
-print(c_words)
-frame = ["bb","aa","bb","aa","cc"] 
-c_frame = count_freq(frame)
-print(c_frame)
-print(top_n(c_words))  
-print(top_n(c_frame))
+if __name__ == "__main__":
+    print(normalize("ПрИвЕт\nМИр\t"))
+    print(normalize("ёжик, Ёлка"))
+    print(normalize("Hello\r\nWorld"))
+    print(normalize("   двойные   пробелы  "))
+    print(tokenize('привет мир'))
+    print(tokenize('hello,world!!!'))
+    print(tokenize('по-настоящему круто'))
+    print(tokenize('2025 год'))
+    print(tokenize('emoji 😀 не слово'))
+    words = ["a", "b", "a", "c", "b", "a"]
+    c_words = count_freq(words)
+    print(c_words)
+    frame = ["bb","aa","bb","aa","cc"] 
+    c_frame = count_freq(frame)
+    print(c_frame)
+    print(top_n(c_words,2))  
+    print(top_n(c_frame,2))
 ```
 ![](/images/lab%2003/text_py.png)
 
