@@ -347,7 +347,7 @@ txt01 = read_text("src/data/lab_04/input.txt")
 print(txt01)
 write_csv([("world","count"),("test",3)], r'C:\GitHub_Misis\python_labs-ETX-\src\data\lab_04\check.csv', header=('a','b'))
 ```
-# Код читает и выводит текст из src/data/lab_04/input.txt а также создает тестовый check.csv файл в src/data/lab_04
+# Код читает и выводит текст из src/data/lab_04/input.txt а также создает тестовый файл check.csv в src/data/lab_04
 ![](/images/lab_04/data_input_text.png)
 ![](/images/lab_04/io_txt_csv.png) 
 ![](/images/lab_04/check_creatingfile.png)
