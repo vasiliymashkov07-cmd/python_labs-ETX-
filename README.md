@@ -306,3 +306,86 @@ def main():
 main()  
 ```
 ![](/images/lab_03/text_stats_py.png)
+
+
+# Лабораторная работа 4
+# Задание 1 - io_txt_csv.py
+```python
+from pathlib import Path
+
+def read_text(path: str | Path, encoding: str = "utf-8") -> str:
+
+    try:
+       p = Path(path)
+       return p.read_text(encoding=encoding)
+    except FileNotFoundError: 
+       return 'Файл не найден'
+    except UnicodeDecodeError: 
+       return 'Не та кодировка'
+
+import csv
+from pathlib import Path
+from typing import Iterable, Sequence
+
+def write_csv(rows: Iterable[Sequence], path: str | Path,
+              header: tuple[str, ...] | None = None) -> None:
+    p = Path(path)
+    rows = list(rows)
+    with p.open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if header is not None:
+            w.writerow(header)
+        if rows:
+            equal = len(rows[0])
+            for r in rows:
+                if len(r) != equal:
+                    raise ValueError('Строка не имеет одинаковое длинну')
+            for r in rows:
+                w.writerow(r)
+
+txt01 = read_text("src/data/lab_04/input.txt")  
+print(txt01)
+write_csv([("world","count"),("test",3)], r'C:\GitHub_Misis\python_labs-ETX-\src\data\lab_04\check.csv', header=('a','b'))
+```
+# Код читает и выводит текст из src/data/lab_04/input.txt а также создает тестовый check.csv файл в src/data/lab_04
+![](/images/lab_04/data_input_text.png)
+![](/images/lab_04/io_txt_csv.png) 
+![](/images/lab_04/check_creatingfile.png)
+
+
+# Задание 2 - text_report.py
+```python
+import sys
+sys.path.append(r'C:\GitHub_Misis\python_labs-ETX-\src\lib')
+from text import normalize,tokenize,top_n,count_freq
+
+from io_txt_csv import read_text,write_csv
+
+def text_stats(text_optimisation):
+    text_optimisation01 = normalize(text_optimisation) 
+    text_optimisation02 = tokenize(text_optimisation01) 
+    words_sum = len(text_optimisation02)
+    count_freqtext = count_freq(text_optimisation02)
+    uni_words = len(count_freqtext)
+    top5 = top_n(count_freqtext)
+
+    print(f"Всего слов: {words_sum}")
+    print(f"Уникальных слов: {uni_words}")
+    print("Топ-5:")
+   
+    for word, count in top5:
+        print(f"{word}:{count}")
+
+
+
+txt01 = read_text("src/data/lab_04/input.txt")
+text_stats(txt01)
+
+write_csv(top_n(count_freq(tokenize(normalize(txt01))), 100)\
+          , path = r'C:\GitHub_Misis\python_labs-ETX-\src\data\lab_04\check2.csv', header= ['Слова', 'Подсчёт'])
+```
+# Код читает текст, выводит работу из 3 Лабы (Как в файле src/lab_03/text_stats.py) и создает файл check2.csv в src/data/lab_04
+# В check2.csv написано каждое слово текста из src/data/lab_04/input.txt и то, сколько раз оно встречается
+![](/images/lab_04/data_input_text.png)
+![](/images/lab_04/text_report.png)
+![](/images/lab_04/check2_creatingfile.png)
