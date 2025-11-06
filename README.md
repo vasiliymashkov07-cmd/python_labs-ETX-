@@ -8,7 +8,7 @@ Name = input('Имя:')
 Age = input('Возраст:')
 print(f"Привет, {Name}! Через год тебе будет {int(Age) + 1}.")
 ```
-![](/images/lab%2001/img01.png)
+![](/images/lab_01/img01.png)
 
 
 # Задание 2
@@ -26,7 +26,7 @@ Average = Sum / 2
 
 print(f'Сумма = {Sum:.2f}; Среднее = {Average:.2f}')
 ```
-![](/images/lab%2001/img02.png)
+![](/images/lab_01/img02.png)
 
 
 # Задание 3
@@ -41,7 +41,7 @@ vat_amount = base * int(vat)/100
 total = base + vat_amount
 print(f'Итого к оплате: {total:.2f}.')
 ``` 
-![](/images/lab%2001/img03.png)
+![](/images/lab_01/img03.png)
 
 
 # Задание 4
@@ -53,7 +53,7 @@ hours = m // 60
 ostatok = m % 60
 print(f'{hours}:{ostatok}')
 ```
-![](/images/lab%2001/img04.png)
+![](/images/lab_01/img04.png)
 
 # Задание 5
 # Программа вводит ФИО, делает инициалы, не учитывая пробелы начала/конца/других лишних пробелов, считает длинну символов ФИО
@@ -65,7 +65,7 @@ initials = ''.join([w[0].upper() for w in FIO_clean.split()])
 print(f'Инициалы: {initials}.')
 print(f'Длина: {len(FIO_clean)}')
 ```
-![](/images/lab%2001/img05.png)
+![](/images/lab_01/img05.png)
 
 
 # Лабораторная работа 2
@@ -107,7 +107,7 @@ print(flatten([[1,2],(3,4,5)]))
 print(flatten([[1],[],[2,3]]))
 print(flatten([[1,2],"ab"]))
 ```
-![](/images/lab%2002/arrays.png)
+![](/images/lab_02/arrays.png)
 
 
 # Задание 2 - matrix.py
@@ -165,7 +165,7 @@ print(col_sums([[-1, 1], [10, -10]]))
 print(col_sums([[0, 0], [0, 0]]))
 print(col_sums([[1, 2], [3]]))
 ```
-![](/images/lab%2002/matrix.png)
+![](/images/lab_02/matrix.png)
 
 
 # Задание 3 - tuples.py
@@ -200,7 +200,7 @@ print(errorcheckandformat("Петров Пётр", " гр. IKBO-12", 5.0))
 print(errorcheckandformat("Петров Пётр Петрович", " гр. IKBO-12", 5.0))
 print(errorcheckandformat("  сидорова  анна   сергеевна ", " гр. ABB-01", 3.999))
 ```
-![](/images/lab%2002/tuples.png)
+![](/images/lab_02/tuples.png)
 
 
 # Лабораторная работа 3
@@ -274,14 +274,17 @@ if __name__ == "__main__":
     print(top_n(c_words,2))  
     print(top_n(c_frame,2))
 ```
-![](/images/lab%2003/text_py.png)
+![](/images/lab_03/text_py.png)
 
 
 # Задание 2 - text_stats.py и defsfromtext.py
 ```python
 import sys
-from defsfromtext import normalize, tokenize, count_freq, top_n
+sys.path.append(r'C:\GitHub_Misis\python_labs-ETX-\src\lib')
+from text import normalize,tokenize,top_n,count_freq
+
 def main():
+
     
     text = "Привет, мир! Привет!!!"
     
@@ -300,7 +303,6 @@ def main():
     for word, count in top_words:
         print(f"{word}:{count}")
 
-
-main() 
+main()  
 ```
-![](/images/lab%2003/text_stats_py.png)
+![](/images/lab_03/text_stats_py.png)

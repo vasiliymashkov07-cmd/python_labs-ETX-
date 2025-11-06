@@ -1,6 +1,9 @@
 import sys
-from defsfromtext import normalize, tokenize, count_freq, top_n
+sys.path.append(r'C:\GitHub_Misis\python_labs-ETX-\src\lib')
+from text import normalize,tokenize,top_n,count_freq
+
 def main():
+
     
     text = "Привет, мир! Привет!!!"
     
