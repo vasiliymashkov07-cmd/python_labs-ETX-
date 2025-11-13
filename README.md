@@ -477,5 +477,6 @@ def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
           
 csv_to_xlsx('src\data\lab_05\samples\people.csv','src\data\lab_05\out\people.xlsx')
 ```
-#Результат преобразования файла people.csv в people.xlsx (Эксель)  ![](/images/lab_05/people.xlsx.png)
+# Результат преобразования файла people.csv в people.xlsx (Эксель)  
+![](/images/lab_05/people.xlsx.png)
 
