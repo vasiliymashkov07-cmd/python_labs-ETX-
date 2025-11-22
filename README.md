@@ -625,4 +625,4 @@ main()
 
 # Результат
 ![](/images/lab_05/people.xlsx.png)                                ![](/images/lab_05/people_from_csv_to_json.png)
-![](/images/lab_06/people_from_json_to_csv.png)
+![](/images/lab_05/people_from_json_to_csv.png)
