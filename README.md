@@ -609,4 +609,5 @@ def main():
 main()
 ```
 # Команды help для cli_text.py и cli_convert.py
-![](/images/lab_06/cli_text_help.png)  ![](/images/lab_06/cli_convert_help.png)
+cli_text: ![](/images/lab_06/cli_text_help.png)  
+cli_convert: ![](/images/lab_06/cli_convert_help.png)
