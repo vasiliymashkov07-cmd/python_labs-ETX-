@@ -620,15 +620,14 @@ main()
 # Пример работы stats в cli_text.py
 ![](/images/lab_06/cli_text_stats.png)
 
-# Запуск и результат всех 3 функций в cli.convert.py
-# Запуск
+# Запуск всех 3 функций в cli.convert.py
 ![](/images/lab_06/cli_convert_3functions.png)
 
 # Результат
-# json2csv:
+json2csv:
 ![](/images/lab_05/people_from_json_to_csv.png)
-# csv2json:
+csv2json:
 ![](/images/lab_05/people_from_csv_to_json.png)
-# csv2xlsx:
+csv2xlsx:
 ![](/images/lab_05/people.xlsx.png)
 
