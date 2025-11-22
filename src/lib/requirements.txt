@@ -1,2 +1,0 @@
-Команда в терминал: py -m pip install openpyxl в терминал VSCODE(Ctrl + '`')
-

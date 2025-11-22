@@ -480,3 +480,134 @@ csv_to_xlsx('src\data\lab_05\samples\people.csv','src\data\lab_05\out\people.xls
 # Результат преобразования файла people.csv в people.xlsx (Эксель)  
 ![](/images/lab_05/people.xlsx.png)
 
+
+# Лабораторная работа 6
+# Задание 1 - cli_text.py
+```python
+import argparse
+from pathlib import Path
+from functions import normalize,tokenize,count_freq,top_n
+
+
+def read_text (path:str | Path, encoding: str = "utf-8")->str:
+    if not(isinstance(path,(str,Path))):
+        raise TypeError(f"Неверный тип path type={type(path)}, должно быть str/Path")
+    if not(isinstance(encoding,str)):
+        raise TypeError(f"Неверный тип encoding type={type(encoding)}, должно быть str")
+    path = Path(path)
+        
+    if not(path.exists()):
+        raise FileNotFoundError('Файл не найден')
+    try:
+        return path.read_text(encoding=encoding)
+    except:
+        raise UnicodeDecodeError("Неверная кодировка файла")
+        
+def main():
+    parser = argparse.ArgumentParser(description="CLI‑утилиты лабораторной №6")
+    subparsers = parser.add_subparsers(dest="command")
+
+    # подкоманда cat
+    cat_parser = subparsers.add_parser("cat", help="Вывести содержимое файла")
+    cat_parser.add_argument("--input", required=True)
+    cat_parser.add_argument("-n", action="store_true", help="Нумеровать строки")
+
+    # подкоманда stats
+    stats_parser = subparsers.add_parser("stats", help="Частоты слов")
+    stats_parser.add_argument("--input", required=True)
+    stats_parser.add_argument("--top", type=int, default=5)
+
+    args = parser.parse_args()
+
+    if args.command == "cat":
+        cat_input = args.input
+        cat_n = args.n
+        i_stroka = 1
+        cat_input = Path(cat_input)
+        if not(cat_input.exists()):
+            raise FileNotFoundError('Файл не найден')
+        try:
+            with cat_input.open('r',encoding = 'utf-8') as d:
+                if cat_n:
+                    for line in d.readlines():
+                        print(f'{i_stroka} строка: {line}',end='')
+                        i_stroka+=1
+                else:
+                    for line in d.readlines():
+                        print(f'{line}',end='')
+        except:
+            raise UnicodeDecodeError('Не удалось прочитать файл')
+            """ Реализация команды cat """
+    elif args.command == "stats":
+        stars_input = args.input
+        stats_top_n = args.top
+        stars_input = Path(stars_input)
+        if not(stars_input.exists()):
+            raise FileNotFoundError(f"Файл не найден по пути {stars_input}")
+        try:
+            text = read_text(path= stars_input)
+        except:
+            raise UnicodeEncodeError("Ошибка чтения файла")
+        if not(type(stats_top_n) == int):
+            raise TypeError(f"Ошибка type(n) = {type(stats_top_n)}, а должен быть int")
+
+        text_normalize = normalize(text)
+        text_tokenize = tokenize(text_normalize)
+        text_freq = count_freq(text_tokenize)
+        text_top = top_n(text_freq,stats_top_n)
+        print('word','count')
+        for word, count in text_top:
+            print(word,count)
+        """ Реализация команды stats """
+
+main()
+```
+# Задание 2 - cli_convert.py
+```python
+import argparse
+from functions import csv_to_json,json_to_csv,csv_to_xlsx
+from pathlib import Path
+
+def main():
+    parser = argparse.ArgumentParser(description="Конвертеры данных")
+    sub = parser.add_subparsers(dest="cmd")
+
+    p1 = sub.add_parser("json2csv",help="Конвертировать JSON в CSV")
+    p1.add_argument("--input", dest="input", required=True,help="Путь к входному JSON файлу")
+    p1.add_argument("--output", dest="output", required=True,help="Путь для сохранения CSV файла")
+
+    p2 = sub.add_parser("csv2json",help="Конвертировать CSV в JSON")
+    p2.add_argument("--input", dest="input", required=True,help="Путь к входному CSV файлу (с заголовком в первой строке)")
+    p2.add_argument("--output", dest="output", required=True,help="Путь для сохранения JSON файла")
+
+    p3 = sub.add_parser("csv2xlsx", help="Конвертировать CSV в XLSX")
+    p3.add_argument("--input", dest="input", required=True,help="Путь к входному CSV файлу")
+    p3.add_argument("--output", dest="output", required=True,help="Путь для сохранения XLSX файла")
+
+    args = parser.parse_args()
+
+    """
+        Вызываем код в зависимости от аргументов.
+    """
+    if args.cmd == "json2csv":
+        path_in = args.input
+        path_ou = Path(args.output)
+        json_to_csv(path_in,path_ou)
+
+
+    elif args.cmd == "csv2json":
+        path_in = args.input
+        path_ou = Path(args.output)
+        csv_to_json(path_in,path_ou)
+
+
+    elif args.cmd =='csv2xlsx':
+        path_in = args.input
+        path_ou = Path(args.output)
+        csv_to_xlsx(path_in,path_ou)
+
+main()
+```
+# Команды help для cli_text.py и cli_convert.py
+![](/images/lab_06/cli_text_help.png)
+![](/images/lab_06/cli_convert_help.png)

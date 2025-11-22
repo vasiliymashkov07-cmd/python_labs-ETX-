@@ -26,4 +26,3 @@ def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
     
     wb.save(xlsx_path)
           
-csv_to_xlsx('src\data\lab_05\samples\people.csv','src\data\lab_05\out\people.xlsx')
