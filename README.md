@@ -627,3 +627,136 @@ main()
 ![](/images/lab_05/people_from_csv_to_json.png)
 ![](/images/lab_05/people.xlsx.png)           
 ![](/images/lab_06/people_from_json_to_csv.png)
+
+
+# Лабораторная работа 7
+# Задание 1 - lab_03_functions_test.py
+```python
+import pytest
+from functions import normalize, tokenize, count_freq, top_n
+
+
+@pytest.mark.parametrize(
+    "source, expected",
+    [
+        ("привет\nмир\t", "привет мир"),
+        ("ёжик, Ёлка", "ежик, елка"),
+        ("hello\r\nworld", "hello world"),
+        ("  двойные   пробелы  ", "двойные пробелы"),
+    ],
+)
+def test_normalize(source, expected):
+    assert normalize(source) == expected
+
+
+@pytest.mark.parametrize(
+    "source, expected",
+    [
+        ("привет мир", ["привет", "мир"]),
+        ("hello,world!!!", ["hello", "world"]),
+        ("по-настоящему круто", ["по-настоящему", "круто"]),
+        ("2025 год", ["2025", "год"]),
+        ("", []),  # пустая строка
+        ("   ", []),  # только пробелы
+        ("!!!@@@###", []),  # только спецсимволы
+        ("раз два.три,четыре!пять?", ["раз", "два", "три", "четыре", "пять"]),
+        ("цифры123 и символы!", ["цифры123", "и", "символы"]),
+    ],
+)
+def test_tokenize(source, expected):
+    assert tokenize(source) == expected
+
+
+@pytest.mark.parametrize(
+    "source, expected",
+    [
+        (["apple", "apple", "banana"], {"apple": 2, "banana": 1}),
+        (["a", "b", "a", "c", "c"], {"a": 2, "b": 1, "c": 2}),
+        ([], {}),  # пустой список
+        (["x"], {"x": 1}),  # один элемент
+        (["lol", "lol", "lol"], {"lol": 3}),  # все одинаковые
+        (["4", "6", "8"], {"4": 1, "6": 1, "8": 1}),  # все разные
+    ],
+)
+def test_count_freq(source, expected):
+    assert count_freq(source) == expected
+
+
+@pytest.mark.parametrize(
+    "freq, n, expected",
+    [
+        ({"pineapple": 2, "apple": 1}, 1, [("pineapple", 2)]),
+        ({"a": 5, "b": 5, "c": 3}, 2, [("a", 5), ("b", 5)]),  # ничья
+        ({"x": 1}, 1, [("x", 1)]),  # один элемент
+        ({}, 5, []),  # пустой словарь
+        ({"a": 10, "b": 10, "c": 10}, 2, [("a", 10), ("b", 10)]),  # все одинаковые
+        ({"z": 1, "y": 2, "x": 3}, 2, [("x", 3), ("y", 2)]),  # проверка порядка
+    ],
+)
+def test_top_n(freq, n, expected):
+    assert top_n(freq, n) == expected
+```
+# Результат теста
+![](/images/lab_07/lab_03_functions_test.png)
+
+
+# Задание 2 - lab_05_functions_test.py
+```python
+import pytest
+from functions import json_to_csv, csv_to_json
+from pathlib import Path
+import csv
+import json
+
+
+def test_json_to_csv_roundtrip(tmp_path: Path):
+    scr = tmp_path / "people.json"
+    dst = tmp_path / "people.csv"
+    data = [
+        {"name": "Alice", "age": 22},
+        {"name": "Bob", "age": 25},
+    ]
+    scr.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    json_to_csv(str(scr), str(dst))
+    with dst.open(encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    assert len(rows) == 2
+    assert {"name", "age"} <= set(rows[0].keys())
+
+
+def test_csv_to_json_roundtrip(tmp_path: Path):
+    scr = tmp_path / "people.csv"
+    dst = tmp_path / "people.json"
+    data = [
+        {"name": "Alice", "age": "22"},
+        {"name": "Bob", "age": "25"},
+    ]
+    with open(scr, "w", newline="", encoding="utf-8") as f:
+        fieldnames = list(data[0].keys())
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(data)
+    csv_to_json(str(scr), str(dst))
+    with dst.open(encoding="utf-8") as f:
+        rows = json.load(f)
+    assert len(rows) == 2
+
+
+@pytest.mark.parametrize(
+    "function, input_file, error",
+    [
+        (json_to_csv, "people.json", ValueError),
+    ],
+)
+def test_json_to_csv(function, input_file, error, tmp_path: Path):
+    file_path = tmp_path / input_file
+    file_path.write_text("Error???", encoding="utf-8")
+    dst = tmp_path / "people.csv"
+    f = json_to_csv if function is json_to_csv else csv_to_json
+    with pytest.raises(error):
+        f(str(file_path), str(dst))
+```
+# Результат теста
+![](/images/lab_07/lab_05_functions_test.png)
+# Стиль кода - Black
+![](/images/lab_07/black_style.png)
