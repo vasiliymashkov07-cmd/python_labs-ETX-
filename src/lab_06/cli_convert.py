@@ -1,22 +1,38 @@
 import argparse
-from functions import csv_to_json,json_to_csv,csv_to_xlsx
+from functions import csv_to_json, json_to_csv, csv_to_xlsx
 from pathlib import Path
+
 
 def main():
     parser = argparse.ArgumentParser(description="Конвертеры данных")
     sub = parser.add_subparsers(dest="cmd")
 
-    p1 = sub.add_parser("json2csv",help="Конвертировать JSON в CSV")
-    p1.add_argument("--input", dest="input", required=True,help="Путь к входному JSON файлу")
-    p1.add_argument("--output", dest="output", required=True,help="Путь для сохранения CSV файла")
+    p1 = sub.add_parser("json2csv", help="Конвертировать JSON в CSV")
+    p1.add_argument(
+        "--input", dest="input", required=True, help="Путь к входному JSON файлу"
+    )
+    p1.add_argument(
+        "--output", dest="output", required=True, help="Путь для сохранения CSV файла"
+    )
 
-    p2 = sub.add_parser("csv2json",help="Конвертировать CSV в JSON")
-    p2.add_argument("--input", dest="input", required=True,help="Путь к входному CSV файлу (с заголовком в первой строке)")
-    p2.add_argument("--output", dest="output", required=True,help="Путь для сохранения JSON файла")
+    p2 = sub.add_parser("csv2json", help="Конвертировать CSV в JSON")
+    p2.add_argument(
+        "--input",
+        dest="input",
+        required=True,
+        help="Путь к входному CSV файлу (с заголовком в первой строке)",
+    )
+    p2.add_argument(
+        "--output", dest="output", required=True, help="Путь для сохранения JSON файла"
+    )
 
     p3 = sub.add_parser("csv2xlsx", help="Конвертировать CSV в XLSX")
-    p3.add_argument("--input", dest="input", required=True,help="Путь к входному CSV файлу")
-    p3.add_argument("--output", dest="output", required=True,help="Путь для сохранения XLSX файла")
+    p3.add_argument(
+        "--input", dest="input", required=True, help="Путь к входному CSV файлу"
+    )
+    p3.add_argument(
+        "--output", dest="output", required=True, help="Путь для сохранения XLSX файла"
+    )
 
     args = parser.parse_args()
 
@@ -26,18 +42,17 @@ def main():
     if args.cmd == "json2csv":
         path_in = args.input
         path_ou = Path(args.output)
-        json_to_csv(path_in,path_ou)
-
+        json_to_csv(path_in, path_ou)
 
     elif args.cmd == "csv2json":
         path_in = args.input
         path_ou = Path(args.output)
-        csv_to_json(path_in,path_ou)
+        csv_to_json(path_in, path_ou)
 
-
-    elif args.cmd =='csv2xlsx':
+    elif args.cmd == "csv2xlsx":
         path_in = args.input
         path_ou = Path(args.output)
-        csv_to_xlsx(path_in,path_ou)
+        csv_to_xlsx(path_in, path_ou)
+
 
 main()
