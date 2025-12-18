@@ -957,9 +957,14 @@ if __name__ == "__main__":
 
 # Результат
 
-#До запуска ![](/images/lab_08/before_start.png)
-#После запуска ![](/images/lab_08/after_start.png)
-#Терминал ![](/images/lab_08/terminal.png)
+# До запуска 
+![](/images/lab_08/before_start.png)
+
+# После запуска 
+![](/images/lab_08/after_start.png)
+
+# Терминал 
+![](/images/lab_08/terminal.png)
 
 
 
