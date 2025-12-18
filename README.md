@@ -1220,3 +1220,155 @@ print(f"\nПосле удаления Сидорова: {len(group.list())} ст
 - Поиск по значению — O(n)
 - Удаление элемента (при известной позиции) — O(1)
 - Поиск позиции элемента — O(n)
+
+# Практика
+# Задание 1 - structures.py
+```python
+from collections import deque
+from typing import Any, Optional
+
+
+class Stack:
+    def __init__(self):
+        self._data: list[Any] = []
+
+    def push(self, item: Any) -> None:
+        self._data.append(item)
+
+    def pop(self) -> Any:
+        if self.is_empty():
+            raise IndexError("Невозможно извлечь элемент: стек пуст")
+        return self._data.pop()
+
+    def peek(self) -> Optional[Any]:
+        if self.is_empty():
+            return None
+        return self._data[-1]
+
+    def is_empty(self) -> bool:
+        return len(self._data) == 0
+
+    def __len__(self) -> int:
+        return len(self._data)
+
+
+class Queue:
+    def __init__(self):
+        self._data: deque[Any] = deque()
+
+    def enqueue(self, item: Any) -> None:
+        self._data.append(item)
+
+    def dequeue(self) -> Any:
+        if self.is_empty():
+            raise IndexError("Невозможно извлечь элемент: очередь пуста")
+        return self._data.popleft()
+
+    def peek(self) -> Optional[Any]:
+        if self.is_empty():
+            return None
+        return self._data[0]
+
+    def is_empty(self) -> bool:
+        return len(self._data) == 0
+
+    def __len__(self) -> int:
+        return len(self._data)
+```
+
+
+# Задание 2 - index_list.py
+```python
+class Node:
+
+   def __init__(self, value, next_node = None) -> None:
+       self.value = value
+       self.next = next_node
+
+   def __repr__(self) -> str:
+       return f"[{self.value}]"
+
+
+class SinglyLinkedList:
+
+   def __init__(self) -> None:
+       self.head: Node = None
+       self.tail: Node = None
+       self._size: int = 0
+
+   def append(self, value) -> None:
+       new_node = Node(value)
+       if self.tail is None:
+           self.head = self.tail = new_node
+       else:
+           self.tail.next = new_node
+           self.tail = new_node
+       self._size += 1
+
+   def prepend(self, value) -> None:
+       new_node = Node(value, self.head)
+       self.head = new_node
+       if self.tail is None:
+           self.tail = new_node
+       self._size += 1
+
+   def insert(self, idx: int, value) -> None:
+       if idx < 0 or idx > len(self):
+           raise IndexError("list index out of range")
+       if idx == 0:
+           self.prepend(value)
+           return
+       if idx == len(self):
+           self.append(value)
+           return
+       current = self.head
+       for _ in range(idx - 1):
+           assert current is not None
+           current = current.next
+       new_node = Node(value, current.next)
+       current.next = new_node
+       self._size += 1
+
+   def remove_at(self, idx: int) -> None:
+       if idx < 0 or idx >= len(self):
+           raise IndexError("list index out of range")
+       if idx == 0:
+           assert self.head is not None
+           self.head = self.head.next
+           if self.head is None:
+               self.tail = None
+           self._size -= 1
+           return
+       current = self.head
+       for _ in range(idx - 1):
+           assert current is not None
+           current = current.next
+       assert current is not None and current.next is not None
+       current.next = current.next.next
+       if current.next is None:
+           self.tail = current
+       self._size -= 1
+
+   def __iter__(self):
+       current = self.head
+       while current:
+           yield current.value
+           current = current.next
+
+   def __len__(self) -> int:
+       return self._size
+
+   def __repr__(self) -> str:
+       return f"SinglyLinkedList({list(self)})"
+```
+
+# Тесты
+
+# Стек
+![](/images/lab_10/structures_example.png)
+
+# Очередь
+![](/images/lab_10/index_list_example.png)
+
+# Вывод
+![](/images/lab_10/results.png)
