@@ -966,5 +966,9 @@ if __name__ == "__main__":
 # Терминал 
 ![](/images/lab_08/terminal.png)
 
+# students_input
+![](/images/lab_08/students_input.png)
 
+# students_output
+![](/images/lab_08/students_output.png)
 
