@@ -1370,5 +1370,5 @@ class SinglyLinkedList:
 # Односвязный список
 ![](/images/lab_10/index_list_example.png)
 
-# Вывод
+# Выводы
 ![](/images/lab_10/results.png)
