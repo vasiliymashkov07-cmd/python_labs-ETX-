@@ -1364,10 +1364,10 @@ class SinglyLinkedList:
 
 # Тесты
 
-# Стек
+# Стек и Очередь
 ![](/images/lab_10/structures_example.png)
 
-# Очередь
+# Односвязный список
 ![](/images/lab_10/index_list_example.png)
 
 # Вывод
