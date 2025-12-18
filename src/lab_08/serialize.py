@@ -9,12 +9,8 @@ def students_to_json(students: List[Student], path: str):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-def students_from_json(
-    path: str,
-) -> List[Student]:  # Читает JSON-массив и создаёт список Student с валидацией
-    # path: путь к JSON файлу
-    # List[Student]: список объектов Student
-    # ValueError: если данные в файле невалидны
+def students_from_json(path: str,) -> List[Student]: 
+    
     try:
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)

@@ -760,3 +760,206 @@ def test_json_to_csv(function, input_file, error, tmp_path: Path):
 ![](/images/lab_07/lab_05_functions_test.png)
 # Стиль кода - Black
 ![](/images/lab_07/black_style.png)
+
+
+# Лабораторная работа 6
+# Задание 1 - models.py
+```python
+from dataclasses import dataclass
+from datetime import datetime, date
+
+
+@dataclass
+class Student:
+    fio: str
+    birthdate: str
+    group: str
+    gpa: float
+
+    def __post_init__(self):
+        # Валидация формата даты
+        try:
+            datetime.strptime(self.birthdate, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError(
+                f"Неверный формат: {self.birthdate}. Ожидается формат: YYYY-MM-DD"
+            )
+
+        # Валидация диапазона GPA
+        if not (0 <= self.gpa <= 5):
+            raise ValueError(f"Gpa должен быть от 0 до 5 {self.gpa}")
+
+    def age(self) -> int:
+        birth_date = datetime.strptime(self.birthdate, "%Y-%m-%d").date()
+        today = date.today()
+
+        # Вычисляем возраст
+        age = today.year - birth_date.year
+
+        # Если день рождения в этом году еще не наступил, вычитаем 1 год
+        if (today.month, today.day) < (birth_date.month, birth_date.day):
+            age = age - 1
+
+        return age
+
+    def to_dict(self) -> dict:
+        # Проверяем, что все поля корректны
+        if not all([self.fio, self.birthdate, self.group]):
+            raise ValueError("Все поля должны быть заполнены")
+
+        return {
+            "fio": self.fio,
+            "birthdate": self.birthdate,
+            "group": self.group,
+            "gpa": self.gpa,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict):
+        # Десереализация из словаря
+        return cls(
+            fio=d["fio"], birthdate=d["birthdate"], group=d["group"], gpa=d["gpa"]
+        )
+
+    def __str__(self):
+        # Вывод
+        return f"{self.fio}, группа {self.group}, возраст {self.age()}, GPA: {self.gpa}"
+```
+
+
+# Задание 2 - serialize.py
+```python
+import json
+from typing import List
+from models import Student
+
+
+def students_to_json(students: List[Student], path: str):
+    data = [s.to_dict() for s in students]
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def students_from_json(path: str,) -> List[Student]: 
+    
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Файл {path} не найден")
+    except json.JSONDecodeError:
+        raise ValueError(f"Файл {path} содержит некорректный JSON")
+
+    if not isinstance(data, list):
+        raise ValueError("JSON должен содержать массив объектов")
+
+    students = []
+    for i, item in enumerate(data):
+        try:
+            required_fields = [
+                "fio",
+                "birthdate",
+                "group",
+                "gpa",
+            ]  # проверяем обязательные поля
+            for field in required_fields:
+                if field not in item:
+                    raise ValueError(
+                        f"Отсутствует обязательное поле '{field}' в элементе {i}"
+                    )
+
+            student = Student.from_dict(item)
+            students.append(student)
+        except ValueError as e:
+            raise ValueError(f"Ошибка валидации в элементе {i}: {e}")
+        except Exception as e:
+            raise ValueError(f"Неожиданная ошибка в элементе {i}: {e}")
+    return students
+```
+
+
+# Проверка функций - functions_check.py
+```python
+from serialize import students_to_json, students_from_json
+import json
+import os
+
+
+class Config:
+    BASE_DIR = "src/data/lab_08"
+    INPUT_FILE = os.path.join(BASE_DIR, "students_input.json")
+    OUTPUT_FILE = os.path.join(BASE_DIR, "students_output.json")
+
+
+def create_input_file():
+    if not os.path.exists(Config.INPUT_FILE):  # создает students_input.json
+        sample_data = [
+            {
+                "fio": "Машков Василий Сергеевич",
+                "birthdate": "2007-08-28",
+                "group": "BIVT-03",
+                "gpa": 4.4,
+            },
+            {
+                "fio": "Тарасов Михаил Ярославович",
+                "birthdate": "2006-05-12",
+                "group": "BIVT-02",
+                "gpa": 4.8,
+            },
+            {
+                "fio": "Большакова Камила Никитична",
+                "birthdate": "1992-01-11",
+                "group": "BIVT-10",
+                "gpa": 2.3,
+            },
+            {
+                "fio": "Кузнецов Роман Адамович",
+                "birthdate": "2010-09-14",
+                "group": "BIVT-12",
+                "gpa": 3.2,
+            },
+        ]
+        with open(Config.INPUT_FILE, "w", encoding="utf-8") as f:
+            json.dump(sample_data, f, ensure_ascii=False, indent=2)
+
+        print(f"Создан файл {Config.INPUT_FILE} с тестовыми данными")
+    return Config.INPUT_FILE
+
+
+def main():
+    print("Думаем")
+
+    # Создаем файл students_input.json
+    create_input_file()
+
+    # Загружаем студентов
+    try:
+        students = students_from_json(Config.INPUT_FILE)  # Используем Config
+        print(f"Загружено: {len(students)} студентов")
+        for s in students:
+            print(f"  - {s}")
+    except Exception as e:
+        print(f"Ошибка загрузки: {e}")
+        return
+
+    # Сохраняем студентов
+    try:
+        students_to_json(students, Config.OUTPUT_FILE)  # Используем Config
+        print(f"Сохранено в {Config.OUTPUT_FILE}")
+    except Exception as e:
+        print(f"Ошибка сохранения: {e}")
+        return
+
+
+if __name__ == "__main__":
+    main()
+```
+
+# Результат
+
+#До запуска ![](/images/lab_08/before_start.png)
+#После запуска ![](/images/lab_08/after_start.png)
+#Терминал ![](/images/lab_08/terminal.png)
+
+
+
